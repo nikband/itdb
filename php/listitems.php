@@ -3,7 +3,7 @@ $(document).ready(function() {
 	var oTable = $('#itemlisttbl').dataTable( {
                 "sPaginationType": "full_numbers",
                 "bJQueryUI": true,
-                "iDisplayLength": 18,
+                "iDisplayLength": 25,
 		"aLengthMenu": [[10,18, 25, 50, 100, -1], [10,18, 25, 50, 100, "All"]],
                 "bLengthChange": true,
                 "bFilter": true,
