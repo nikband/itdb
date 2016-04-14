@@ -1,4 +1,5 @@
 <?php 
+$tmpdir= sys_get_temp_dir ();
 if (!isset($initok)) {echo "do not run this script directly";exit;}
 
 if (!isset($_POST['nextstep']))
@@ -47,7 +48,7 @@ $nfields=count($fno2name);
 
 if ($nextstep==1 && strlen($_FILES['file']['name'])>2) { //insert file
   $filefn=strtolower("import-".$_COOKIE["itdbuser"]."-".validfn($_FILES['file']['name']));
-  $uploadedfile = "/tmp/".$filefn;
+  $uploadedfile = "$tmpdir/".$filefn;
   $result = '';
 
   //Move the file from the stored location to the new location
@@ -83,7 +84,7 @@ if ($nextstep==1 && strlen($_FILES['file']['name'])>2) { //insert file
 <form method=post name='importfrm' action='<?php echo $scriptname?>?action=<?php echo $action?>' enctype='multipart/form-data'>
 <tr>
 <tr><td>File:</td><td> <input name="file" id="file" size="25" type="file"></td></tr>
-<tr><td>Delimeter:</td><td> <input size=1 type=text name='delim' value=';' maxlength=1></td></tr>
+<tr><td style='font-weight:bold'>Delimiter:</td><td> <input size=1 type=text name='delim' value=';' maxlength=1> (field separator)</td></tr>
 <tr><td>Skip 1st row:</td><td><select name=skip1st><option value=1>Yes</option><option value=0>No</option></select></td></tr>
 <tr><td colspan=2><input type=submit value='Upload file and inspect fields'></td></tr>
 <input type=hidden name='nextstep' value='1'>
@@ -130,7 +131,13 @@ Expected format is CSV file with the following fields:<br>
 
 		$cols=explode($delim,$line);
 		if (count($cols) != $nfields) {
-			echo "<b><big>Error: field count in line $line_num is ".count($cols).", $nfields is expected</big></b>";
+			echo "<b><big style='color:red'>Error: field count in line $line_num is ".count($cols).", $nfields is expected</big></b>";
+			$nextstep=0;
+			break;
+		}
+
+		if (strlen(trim($cols[$name2fno['owner']]))<1) {
+			echo "<b><big style='color:red'>Error: no owner specified in line $line_num</big></b>";
 			$nextstep=0;
 			break;
 		}
@@ -415,7 +422,7 @@ if ($nextstep==2) {
             'function'=>$function,
             )
         );
-		 //echo "<br>Isql=$sql<br>";
+		 echo "<br>Isql=$sql<br>";
 	}
 
 	echo "\n<br><h2>Finished.</h2>\n";

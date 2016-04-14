@@ -1,10 +1,21 @@
 CHANGELOG
+DEPRECATED
 
 LEGEND:
 -------------
 +:new feature 
 I:improvement 
 B:bugfix
+
+1.12 -> 1.13 20/10/2014
+-------------------------------------------------------------------------------------------------------
++:pdf labels: allow for text to the right of QR, no text at all
++:Chineese language
++:German language
++:Russian rubel
++:check for duplicate serial number
+B:some security fixes
+
 
 1.11 -> 1.12  23/12/2013
 -------------------------------------------------------------------------------------------------------

@@ -9,6 +9,8 @@ if (isset($_POST['labelaction']) && $_POST['labelaction']=="savepreset") {
     if (!isset($wantbarcode)) $wantbarcode=0;
     if (!isset($wantheadertext)) $wantheadertext=0;
     if (!isset($wantheaderimage)) $wantheaderimage=0;
+    if (!isset($wantnotext)) $wantnotext=0;
+    if (!isset($wantraligntext)) $wantraligntext=0;
 
     foreach($_POST as $k => $v) { 
 		${$k} = $v; 
@@ -19,10 +21,10 @@ if (isset($_POST['labelaction']) && $_POST['labelaction']=="savepreset") {
     $sql="INSERT INTO labelpapers ".
     " (rows,cols,lwidth,lheight, vpitch, hpitch, tmargin, bmargin, lmargin, rmargin, name,  ".
     " border, padding, fontsize, headerfontsize, barcodesize, idfontsize, wantbarcode, wantheadertext, wantheaderimage,  ".
-    " headertext,image,imagewidth,imageheight,papersize,qrtext) ".
+    " headertext,image,imagewidth,imageheight,papersize,qrtext,wantnotext,wantraligntext) ".
     " values ($rows,$cols,$lwidth,$lheight, $vpitch, $hpitch, $tmargin, $bmargin, $lmargin, $rmargin, '$name', ".
     " $border, $padding, $fontsize, $headerfontsize,$barcodesize, $idfontsize, $wantbarcode, $wantheadertext, $wantheaderimage, ".
-    " '$headertext', '$image', '$imagewidth', '$imageheight', '$papersize','".htmlentities($qrtext, ENT_QUOTES)."' )";
+    " '$headertext', '$image', '$imagewidth', '$imageheight', '$papersize','".htmlentities($qrtext, ENT_QUOTES)."','$wantnotext','$wantraligntext' )";
     $sth=db_execute($dbh,$sql);
   }
 }
@@ -33,7 +35,7 @@ if (!isset($initok)) {echo "do not run this script directly";exit;}
 <script>
 function ldata(rows,cols,lwidth,lheight, vpitch, hpitch, tmargin, bmargin, lmargin, rmargin,name, 
                border,padding,fontsize, headerfontsize,barcodesize, idfontsize,wantbarcode,wantheadertext,wantheaderimage,
-               headertext,image,imageheight,imagewidth,papersize,qrtext)
+               headertext,image,imageheight,imagewidth,papersize,qrtext,wantnotext,wantraligntext)
 {
   document.selitemsfrm.lwidth.value=lwidth;
   document.selitemsfrm.lheight.value=lheight;
@@ -59,6 +61,8 @@ function ldata(rows,cols,lwidth,lheight, vpitch, hpitch, tmargin, bmargin, lmarg
   $("#wantbarcode").prop("checked", wantbarcode);
   $("#wantheadertext").prop("checked", wantheadertext);
   $("#wantheaderimage").prop("checked", wantheaderimage);
+  $("#wantnotext").prop("checked", 1*wantnotext);
+  $("#wantraligntext").prop("checked", 1*wantraligntext);
 
   document.selitemsfrm.headertext.value=headertext;
   document.selitemsfrm.rows.selectedIndex = rows-1;
@@ -171,6 +175,7 @@ $alllabels=$sth->fetchAll(PDO::FETCH_ASSOC);
 for ($i=0;$i<count($alllabels);$i++) {
   $labelpapers[$alllabels[$i]['id']]=$alllabels[$i];
 }
+
 if (!isset($_POST['name'])) {
   foreach(array_keys($alllabels[0]) as $key) {
     $$key=$alllabels[0][$key];
@@ -323,7 +328,9 @@ foreach ($labelpapers as $lp) {
        "\"{$lp['imageheight']}\",".
        "\"{$lp['imagewidth']}\",".
        "\"{$lp['papersize']}\",".
-       "\"{$lp['qrtext']}\"".
+       "\"{$lp['qrtext']}\",".
+       "\"{$lp['wantnotext']}\",".
+       "\"{$lp['wantraligntext']}\"".
        ")'>{$lp['name']}</a>"; 
 
   echo " <a href='javascript:delconfirm(\"{$lp['id']}\",".
@@ -351,7 +358,7 @@ echo "<tr><td class='tdt'>".t("Rows").":</td><td>";
 echo "<select name=rows>\n";
 for ($i=1;$i<40;$i++) {
   if (isset($_POST['rows']) && $_POST['rows']=="$i") $s=" SELECTED "; 
-  elseif (!isset($_POST['rows']) && $i=="6") $s=" SELECTED "; 
+  elseif (!isset($_POST['rows']) && $i=="$rows") $s=" SELECTED "; 
   else $s="";
   echo "\n<option $s value=$i>$i</option>";
 }
@@ -361,7 +368,7 @@ echo "<tr><td class='tdt'>".t('Columns').":</td><td>";
 echo "<select name=cols>\n";
 for ($i=1;$i<10;$i++) {
   if (isset($_POST['cols']) && $_POST['cols']=="$i") $s=" SELECTED "; 
-  elseif (!isset($_POST['cols']) && $i=="2") $s=" SELECTED "; 
+  elseif (!isset($_POST['cols']) && $i=="$cols") $s=" SELECTED "; 
   else $s="";
   echo "\n<option $s value=$i>$i</option>";
 }
@@ -407,6 +414,9 @@ echo "</select>\n</td></tr>\n";
 	</td></tr>
 <tr><td class='tdt'><label for=wantheadertext><?php te("Header Text");?>:</label></td><td><input id='wantheadertext' type=checkbox <?php if($wantheadertext) echo "CHECKED"; ?> name=wantheadertext></td></tr>
 <tr><td class='tdt'><label for=wantheaderimage><?php te("Header Image");?>:</label></td><td><input id='wantheaderimage' type=checkbox <?php if($wantheaderimage) echo "CHECKED"; ?> name=wantheaderimage></td></tr>
+
+<tr><td class='tdt'><label for=wantnotext><?php te("No Text");?>:</label></td><td><input title='<?php te("Just print the barcode, no text")?>' id='wantnotext' type=checkbox <?php if($wantnotext) echo "CHECKED"; ?> name=wantnotext></td></tr>
+<tr><td class='tdt'><label for=wantraligntext><?php te("Text to the right of barcode");?>:</label></td><td><input id='wantraligntext' type=checkbox <?php if($wantraligntext) echo "CHECKED"; ?> name=wantraligntext></td></tr>
 
 
 <tr><td class='tdt'><label for=labelskip><?php te("Skip");?>:</label></td><td title='<?php te("use when the top labels have already been printed");?>' ><input size=4 value='<?php echo $labelskip?>' name=labelskip> <?php te("labels");?></td></tr>

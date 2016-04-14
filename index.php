@@ -2,8 +2,8 @@
 //ITDB:IT-items database
 //sivann at gmail.com 2008-2014
 
-$version="1.12";
-$fordbversion=5;
+$version=file_get_contents("VERSION");
+$fordbversion=6;
 
 /*********************************************************************** 
  *********************************************************************** 
@@ -31,8 +31,8 @@ else {
 }
 
 if ((isset($_GET['export']) && ($_GET['export']==1))) {
-  $action = "listitems"; 
-  require ("php/listitems.php");
+  $action = "listitems2"; 
+  require ("php/listitems2.php");
   exit;
 }
 

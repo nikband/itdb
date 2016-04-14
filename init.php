@@ -150,7 +150,13 @@ $settings=$sth->fetchAll(PDO::FETCH_ASSOC);
 $settings=$settings[0];
 
 
-if ($settings['dateformat']=="dmy") {
+if($settings['dateformat']=="ymd") {
+  $datetitle="y-m-d or yyyy";
+  $datecalparam="yy-mm-dd";
+  $dateparam="Y-m-d";
+  $maskdateparam="y999-m9-d9";
+}
+elseif ($settings['dateformat']=="dmy") {
   $datetitle="d/m/y or yyyy";
   $datecalparam="dd/mm/yy";
   $dateparam="d/m/Y";
@@ -199,7 +205,7 @@ if (!$demomode ) {
 
         if ($settings['useldap'] && $username != 'admin') {
             $r=connect_to_ldap_server($settings['ldap_server'],$username,$password,$settings['ldap_dn']);
-            echo "HERE. r=".var_dump($r)."\n";
+            //echo "HERE. r=".var_dump($r)."\n";
             if ($r == false) {
                 $authstatus=0;
                 $authmsg="Wrong Password";
@@ -221,6 +227,9 @@ if (!$demomode ) {
         }
 
         if (!$authstatus) { //try local users
+		   $username=str_replace(";","",$username);
+		   $username=str_replace("%","",$username);
+		   $username=str_replace("'","",$username);
            $sth=db_execute($dbh,"SELECT * from users where username='$username' limit 1",1);
            $userdata=$sth->fetchAll(PDO::FETCH_ASSOC);
            $nr=count($userdata);
