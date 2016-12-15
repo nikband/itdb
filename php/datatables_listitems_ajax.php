@@ -11,7 +11,7 @@
 	 */
 	$aColumns = array('itemid','itemlabel','typedesc','title','itemmodel','dnsname','serial','purchasedate',
 	'remdays','username','statusdesc','locationname','areaname','rackinfo','purchprice','macs','ipv4','ipv6',
-	'remadmip','taginfo','softinfo');
+	'remadmip','taginfo','softinfo','itemcomment');
 	
 	include( '../init.php');
 
@@ -132,7 +132,8 @@
 				  '' as remdays, purchasedate, warrantymonths, 
                   coalesce(racks.label,'') || ' ' || coalesce(racks.usize,'') || ' ' || coalesce(racks.model,'') AS rackinfo,
                   (SELECT group_concat( tags.name ,',') from tags,tag2item WHERE tag2item.itemid=items.id AND tags.id=tag2item.tagid) AS taginfo,
-                  (SELECT group_concat( software.stitle ,'|') from software,item2soft WHERE item2soft.itemid=items.id AND software.id=item2soft.softid) AS softinfo
+                  (SELECT group_concat( software.stitle ,'|') from software,item2soft WHERE item2soft.itemid=items.id AND software.id=item2soft.softid) AS softinfo,
+		  items.comments AS itemcomment                  
                   FROM
                   items
 		  JOIN itemtypes ON items.itemtypeid=itemtypes.id 
@@ -177,7 +178,7 @@
                   (SELECT group_concat( tags.name ,', ') FROM tags,tag2item WHERE tag2item.itemid=items.id AND tags.id=tag2item.tagid) AS taginfo,
                   (SELECT group_concat( software.stitle ,',') FROM software,item2soft WHERE item2soft.itemid=items.id and software.id=item2soft.softid) AS softinfo,
                   purchprice,
-                  macs, ipv4, ipv6, remadmip
+                  macs, ipv4, ipv6, remadmip, items.comments AS itemcomment
                   FROM
                   items
 		  JOIN itemtypes ON items.itemtypeid=itemtypes.id 
