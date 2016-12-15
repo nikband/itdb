@@ -5,7 +5,7 @@ $(document).ready(function() {
 	oTable = $('#itemlisttbl').dataTable( {
                 "sPaginationType": "full_numbers",
                 "bJQueryUI": true,
-                "iDisplayLength": 18,
+                "iDisplayLength": 25,
 				"aLengthMenu": [[10,18, 25, 50, 100, -1], [10,18, 25, 50, 100, "All"]],
                 "bLengthChange": true,
                 "bFilter": true,
@@ -106,7 +106,7 @@ $(document).ready(function() {
 <td style='vertical-align:top'>
 	<table>
 		<?php
-		for ($i1=0;$i1<=20;$i1+=2) {
+		for ($i1=0;$i1<=21;$i1+=2) {
 		?>
 		<tr id="filter_col_<?php echo $i1?>" data-column="<?php echo $i1?>">
 			<td class='col_filt_name'>Name</td>
@@ -121,7 +121,7 @@ $(document).ready(function() {
 <td style='vertical-align:top'>
 	<table>
 		<?php
-		for ($i2=1;$i2<=20;$i2+=2) {
+		for ($i2=1;$i2<=21;$i2+=2) {
 		?>
 		<tr id="filter_col_<?php echo $i2?>" data-column="<?php echo $i2?>">
 			<td class='col_filt_name'>Name</td>
@@ -161,6 +161,7 @@ $(document).ready(function() {
 	<th class='colhead'><?php te("RemAdmIP");?></th>
 	<th class='colhead'><?php te("Tags");?></th>
 	<th class='colhead'><?php te("Software");?></th>
+	<th class='colhead'><?php te("Comments");?></th>
 	</tr>
 </thead>
 <tbody>
