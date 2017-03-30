@@ -31,6 +31,7 @@ $reports=array (
 'nolocation' => t('Items without location'),
 'depreciation3' => t('Item depreciation value 3 years'),
 'depreciation5' => t('Item depreciation value 5 years'),
+'softwareperusers' => t('Software Assigned per Users'),
 );
 
 
@@ -66,6 +67,20 @@ $reports=array (
 <?php 
 switch ($query) {
 
+  case "softwareperusers":
+    //,software.sinfo as Software_Info,
+    $sql="select users.username as User,items.id as ID,items.model as Item_Model,items.sn as Item_SN,software.id as Software_ID,software.stitle as Software_Title,software.sversion as Software_Version,software.slicenseinfo as Software_LicenceInfo, software.licqty as Software_Quantity from software ".
+	 "join item2soft ON software.id = item2soft.softid ".
+	 "join items ON items.id = item2soft.itemid ".
+     "join users ON items.userid = users.id ".
+     "order by User;";
+    $editlnk="$scriptname?action=edititem&id";
+    $graph['type']="pie";
+    $graph['colx']="User";
+    $graph['coly']="Software_Title";
+    $graph['limit']=15;
+  break;		
+		
   case "depreciation5":
     $sql="select items.id as ID,typedesc as type, agents.title as manufacturer ,model, strftime('%Y-%m-%d', purchasedate,'unixepoch') AS PurchaseDate, ".
 	     "purchprice as PurchasePrice, ".
