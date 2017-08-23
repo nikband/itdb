@@ -409,7 +409,7 @@ if ($nextstep==2) {
  			$purchasedate = $timestamp;
  		}
 		$warrmonths=$cols[$name2fno['warrantymonths']];
-		$origin=$cols[$name2fno['warrantymonths']];
+		$origin=$cols[$name2fno['origin']];
 
 
 		$sql="INSERT into items ".
