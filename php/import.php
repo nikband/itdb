@@ -430,14 +430,14 @@ if ($nextstep==2) {
             'rackmountable'=>$rackmountable,
             'itemtypeid'=>$itemtypeid,
             'status'=>$status,
-            'locationid'=>$locationid,
+            'locationid'=>$locid,
             'locareaid'=>$locareaid,
             'label'=>$label,
             'function'=>$function,
 	    'sn2'=>$sn2,
 	    'purchasedate'=>$purchasedate,
 	    'warrantymonths'=>$warrmonths,
-	    'origin'=>$origin,		    
+	    'origin'=>$origin,
             )
         );
 		 //echo "<br>Isql=$sql<br>";
@@ -455,12 +455,12 @@ function lineok ($line,$delim) {
 	if (!strlen($cols[$name2fno['ip']])  //ip
 		&& !strlen($cols[$name2fno['manufacturer']]) //manufact
 		&& !strlen($cols[$name2fno['model']])) { //model
-        echo "\n";
+        	echo "\n";
 		echo "Skipping semi-empty line ($line)<br>";
-        echo "Manuf: {$cols[$name2fno['manufacturer']]} <br>";
-        echo "Model: {$cols[$name2fno['model']]} <br>";
-        echo "Delim:$delim<br>\n";
-        echo "cols:".print_r($cols)."<br>";
+        	echo "Manuf: {$cols[$name2fno['manufacturer']]} <br>";
+        	echo "Model: {$cols[$name2fno['model']]} <br>";
+        	echo "Delim:$delim<br>\n";
+        	echo "cols:".print_r($cols)."<br>";
 		return 0;
 	}
 	return 1;
