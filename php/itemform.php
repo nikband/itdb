@@ -347,7 +347,7 @@ else if ($action=="edititem") {
       if (is_numeric($location['floor']))
           $itype=$location['name'].", ".t("Floor").":".$location['floor'];
       else
-          $itype=$location['name'];
+          $itype=$location['name'].", Floor:".$location['floor'];
 	  $s="";
 	  if (($locationid=="$dbid")) $s=" SELECTED "; 
 	  echo "    <option $s value='$dbid'>$itype</option>\n";
