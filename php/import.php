@@ -32,6 +32,10 @@ $fno2name=array(
 /*13*/   'cpu',
 /*14*/   'ram',
 /*15*/   'hd',
+/*16*/   'sn2',
+/*17*/   'purchasedate',
+/*18*/   'warrantymonths',
+/*19*/   'origin',	
 );
 
 $name2fno=array_flip($fno2name);
@@ -386,22 +390,32 @@ if ($nextstep==2) {
 		$manufacturerid=getagentidbyname($cols[$name2fno['manufacturer']]);
 		$model=trim($cols[$name2fno['model']]);
 		$sn=trim($cols[$name2fno['sn']]);
-        $ispart=0;
-        $rackmountable=0;
+		$ispart=0;
+		$rackmountable=0;
 		$itemtypeid=getitemtypeidbyname($cols[$name2fno['itemtype']]);
 		$status=getstatustypeidbyname($cols[$name2fno['status']]);
-        $label=trim($cols[$name2fno['label']]);
+		$label=trim($cols[$name2fno['label']]);
 		$function=$cols[$name2fno['function']];
 		$cpu=$cols[$name2fno['cpu']];
 		$ram=$cols[$name2fno['ram']];
 
-
+		$sn2=trim($cols[$name2fno['sn2']]);
+		$purchasedate=trim($cols[$name2fno['purchasedate']]);
+		if(strlen($purchasedate)>1)
+ 		{
+ 			$arrDate = explode("-",$purchasedate);
+							 #  (h,m,s,month,day,year)
+			$timestamp = mktime(00,00,00,$arrDate[0],$arrDate[1],$arrDate[2]);
+ 			$purchasedate = $timestamp;
+ 		}
+		$warrmonths=$cols[$name2fno['warrantymonths']];
+		$origin=$cols[$name2fno['warrantymonths']];
 
 
 		$sql="INSERT into items ".
-             "(userid,ipv4,dnsname,comments,manufacturerid,model,sn,ispart,rackmountable,itemtypeid,status,locationid,locareaid,label,function) ".
+             "(userid,ipv4,dnsname,comments,manufacturerid,model,sn,ispart,rackmountable,itemtypeid,status,locationid,locareaid,label,function,sn2,purchasedate,warrantymonths,origin) ".
              " VALUES ".
-             "(:userid,:ipv4,:dnsname,:comments,:manufacturerid,:model,:sn,:ispart,:rackmountable,:itemtypeid,:status,:locationid,:locareaid,:label,:function)";
+             "(:userid,:ipv4,:dnsname,:comments,:manufacturerid,:model,:sn,:ispart,:rackmountable,:itemtypeid,:status,:locationid,:locareaid,:label,:function,:sn2,:purchasedate,:warrantymonths,:origin)";
 
         $stmt=db_execute2($dbh,$sql,
             array(
@@ -420,9 +434,13 @@ if ($nextstep==2) {
             'locareaid'=>$locareaid,
             'label'=>$label,
             'function'=>$function,
+	    'sn2'=>$sn2,
+	    'purchasedate'=>$purchasedate,
+	    'warrantymonths'=>$warrmonths,
+	    'origin'=>$origin,		    
             )
         );
-		 echo "<br>Isql=$sql<br>";
+		 //echo "<br>Isql=$sql<br>";
 	}
 
 	echo "\n<br><h2>Finished.</h2>\n";
